@@ -63,18 +63,17 @@ const markaText = truncate(cleanText(marka), 30);
   <text x="${Math.round(width / 2)}" y="${height - Math.round(bandHeight * 0.25)}" font-family="Arial, sans-serif" font-size="${smallFontSize}" fill="#ffffff" opacity="0.85" text-anchor="middle" dominant-baseline="middle">Daha fazlasi icin takip et</text>
 </svg>`;
 
-    const outputBuffer = await sharp(imageBuffer)
-      .composite([{ input: Buffer.from(svgOverlay), top: 0, left: 0 }])
-      .png()
-      .toBuffer();
+   const outputBuffer = await sharp(imageBuffer)
+  .composite([{ input: Buffer.from(svgOverlay), top: 0, left: 0 }])
+  .jpeg({ quality: 82 })
+  .toBuffer();
 
-    const resultBase64 = outputBuffer.toString('base64');
-
-    res.json({
-      success: true,
-      image_base64: resultBase64,
-      format: 'png',
-    });
+const resultBase64 = outputBuffer.toString('base64');
+res.json({
+  success: true,
+  image_base64: resultBase64,
+  format: 'jpeg',  // bunu da güncelle
+});
 
   } catch (err) {
     console.error('Overlay error:', err);
