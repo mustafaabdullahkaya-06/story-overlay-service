@@ -45,9 +45,14 @@ app.post('/overlay', upload.single('image'), async (req, res) => {
     const truncate = (text, maxLen) =>
       text && text.length > maxLen ? text.substring(0, maxLen - 3) + '...' : (text || '');
 
-    const baslikText = truncate(baslik, 50);
-    const aciklamaText = truncate(aciklama, 80);
-    const markaText = truncate(marka, 30);
+const cleanText = (text) => {
+  if (!text) return '';
+  return text.replace(/[\u{1F300}-\u{1FFFF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F1FF}\u{1F200}-\u{1F2FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u2600-\u26FF\u2700-\u27BF]/gu, '').trim();
+};
+
+const baslikText = truncate(cleanText(baslik), 50);
+const aciklamaText = truncate(cleanText(aciklama), 80);
+const markaText = truncate(cleanText(marka), 30);
 
     const svgOverlay = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
   <rect x="0" y="0" width="${width}" height="${bandHeight}" fill="rgba(0,0,0,0.72)"/>
